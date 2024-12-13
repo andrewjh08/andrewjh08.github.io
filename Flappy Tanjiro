@@ -1,0 +1,69 @@
+PImage tan;
+PImage bg, bg2;
+PImage pipeA, pipeB;
+int bgx;
+int y, Vy;
+int px, py;
+boolean gameState;
+ 
+void setup(){
+  size(600,600);
+  bg = loadImage("inf.png");
+  bg2 = loadImage("inf.png");
+  y = 0;
+  Vy = 0;
+  tan = loadImage("tan.png");
+  px = width;
+  py = int(random(200, height-200));
+  pipeA = loadImage("pipe2.png");
+  pipeB = loadImage("pipe.png");
+  gameState = true;
+}
+void draw(){
+  if(gameState){
+    drawBG();
+    drawTan();
+    drawPipes();
+    checkCrash();
+  }
+}
+ 
+void checkCrash(){
+  if(px < 75 + tan.width && px > 25 && y - py > 100){
+    gameState = false;
+  }
+  if(px < 75 + tan.width && px > 25 && py - y > 100){
+    gameState = false;
+  }
+}
+void mousePressed(){
+  Vy = -10;
+}
+ 
+void drawPipes(){
+  px = px - 3;
+  image(pipeA, px-25, py-pipeA.height-100);
+  image(pipeB, px-25, py+100);
+  if(px < -50){
+    px = width + 50;
+    py = int(random(100,height-100));
+  }
+}
+ 
+void drawTan(){
+  image(tan, 50, y);
+  y += Vy;
+  Vy++;
+  if(y > height-tan.height){
+    y = height-tan.height;
+  }
+}
+void drawBG(){
+  image(bg,bgx,0);
+  image(bg2, bgx + bg.width, 0);
+  image(bg, bgx+2*bg.width, 0);
+  bgx-= 1;  
+  if(bgx < -2*bg.width){
+    bgx = 0;
+  }
+}
